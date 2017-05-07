@@ -1,27 +1,46 @@
 <html id="html">
 <body>
-<label style="color:blue">Volume</label><input id="volume" type="range" min="0" max="100" value="100" step="1"></input> <label style="color:blue">Mute</label><input type="checkbox" id="mute">
+
+<label style="color:blue">Volume</label><input id="volume" type="range" min="0" max="100" value="100" step="1"></input> <label style="color:blue">Mute</label><input type="checkbox" id="mute"><span style="float: right; color: grey"> FPS: <span id="fps"></span></span>
 <audio id="ticktock" autoplay loop>
 <source src="ticktock.ogg"/>
 </audio>
 <div style="font-size: 4.5vw; text-align: center; color: lightblue; mix-blend-mode: color-dodge;">
 Will the wee wan be in the public hoos in
 </div>
-<div id="clockdiv" style="font-size: 4vw; text-align: center; padding: 25% 0; color: green; mix-blend-mode: difference;">
+<div id="clockdiv" style="font-size: 3vw; text-align: center; padding: 25% 0; color: green; mix-blend-mode: difference;">
 <span class="days"></span>
 days,
 <span class="hours"></span>
 hours,
 <span class="minutes"></span>
-minutes and
+minutes,
 <span class="seconds"></span>
-seconds?
+seconds and
+<span class="mseconds"></span>
+milliseconds?
 </div>
 <script>
+var base = performance.now(),
+    count = 0,
+    fps = document.getElementById('fps');
+
+function anime(time) {
+  ++count;
+  requestAnimationFrame(anime);
+  if (time - base >= 1000) {
+    fps.textContent = Math.round((count * 1000) / (time - base));
+    base = time;
+    count = 0;
+  }
+}
+
+anime();
+
 var volume = document.getElementById("volume");
 
 volume.addEventListener("input", function(){
-  ticktock.volume = this.value * this.value / 10000;
+  ticktock.volume = this.value * this.value * this.value / 1000000;
 });
 
 document.getElementById("mute").onclick = function() {
@@ -302,8 +321,9 @@ background: url(weewanbackground.png) no-repeat center center fixed;
 </style>
 <script>
 function getTimeRemaining(endtime) {
-  var t = Date.parse(endtime) - Date.parse(new Date());
-  var seconds = Math.floor((t / 1000) % 60);
+  var t = Date.parse(endtime) - Date.now();
+  var mseconds = Math.floor(t % 1000);
+  var seconds = Math.floor((t / 1000) % 60); 
   var minutes = Math.floor((t / 1000 / 60) % 60);
   var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
   var days = Math.floor(t / (1000 * 60 * 60 * 24));
@@ -312,7 +332,8 @@ function getTimeRemaining(endtime) {
     'days': days,
     'hours': hours,
     'minutes': minutes,
-    'seconds': seconds
+    'seconds': seconds,
+    'mseconds': mseconds
   };
 }
 
@@ -322,6 +343,7 @@ function initializeClock(id, endtime) {
   var hoursSpan = clock.querySelector('.hours');
   var minutesSpan = clock.querySelector('.minutes');
   var secondsSpan = clock.querySelector('.seconds');
+  var msecondsSpan = clock.querySelector('.mseconds');
 
   function updateClock() {
     var t = getTimeRemaining(endtime);
@@ -330,14 +352,15 @@ function initializeClock(id, endtime) {
     hoursSpan.innerHTML = t.hours;
     minutesSpan.innerHTML = t.minutes;
     secondsSpan.innerHTML = t.seconds;
+    msecondsSpan.innerHTML = t.mseconds;
 
-    if (t.total <= 0) {
+  if (t.total <= 0) {
       clearInterval(timeinterval);
-    }
+   }
   }
 
   updateClock();
-  var timeinterval = setInterval(updateClock, 1000);
+  var timeinterval = setInterval(updateClock, 0);
 }
 
 var deadline = 'June 9 2017 19:25:00 GMT+0100';
