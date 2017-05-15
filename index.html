@@ -1,5 +1,5 @@
 <html id="html">
-<body>
+<body onload="">
 
 <label style="color:blue">Volume</label><input id="volume" type="range" min="0" max="100" value="100" step="1"></input> <label style="color:blue">Mute</label><input type="checkbox" id="mute"><span style="float: right; color: grey"> FPS: <span id="fps"></span></span>
 <audio id="ticktock" autoplay loop>
@@ -21,21 +21,32 @@ seconds and
 milliseconds?
 </div>
 <script>
+var old = (new Date()).getTime();
 var base = performance.now(),
     count = 0,
     fps = document.getElementById('fps');
-
 function anime(time) {
   ++count;
   requestAnimationFrame(anime);
-  if (time - base >= 1000) {
+seconds = (Date.now() - old) / 1000;
+
+   if (seconds <= 1){
     fps.textContent = Math.round((count * 1000) / (time - base));
     base = time;
     count = 0;
-  }
+}
+
+
+if (time - base >= 200){
+    fps.textContent = Math.round((count * 1000) / (time - base));
+    base = time;
+    count = 0;
+   }
+
 }
 
 anime();
+
 
 var volume = document.getElementById("volume");
 
