@@ -1,11 +1,11 @@
 <html id="html">
 <body onload="">
 
-<label style="color:blue">Volume</label><input id="volume" type="range" min="0" max="100" value="100" step="1"></input> <label style="color:blue">Mute</label><input type="checkbox" id="mute"><span style="float: right; color: grey"> FPS: <span id="fps"></span></span>
+<label style="color:blue" id="labelshide">Volume</label><input id="volume" type="range" min="0" max="100" value="100" step="1"></input> <label id="labelshide2" style="color:blue">Mute</label><input type="checkbox" id="mute"><span style="float: right; color: grey"> FPS: <span id="fps"></span></span>
 <audio id="ticktock" autoplay loop>
 <source src="ticktock.ogg"/>
 </audio>
-<div style="font-size: 4.5vw; text-align: center; color: lightblue; mix-blend-mode: color-dodge;">
+<div style="font-size: 4.5vw; text-align: center; color: lightblue; mix-blend-mode: color-dodge;" id ="question">
 Will the wee wan be in the public hoos in
 </div>
 <div id="clockdiv" style="font-size: 2.75vw; text-align: center; padding: 25% 0; color: green; mix-blend-mode: difference;">
@@ -367,6 +367,13 @@ function initializeClock(id, endtime) {
 
   if (t.total <= 0) {
       clearInterval(timeinterval);
+	document.getElementById("clockdiv").style.visibility = "hidden";
+	document.getElementById("volume").style.visibility = "hidden";
+	document.getElementById("mute").style.visibility = "hidden";
+	document.getElementById("labelshide").style.visibility = "hidden";
+	document.getElementById("labelshide2").style.visibility = "hidden";
+document.getElementById("question").innerHTML = "The wee wan ??? in the public hoos!"
+ticktock.muted = true;
    }
   }
 
@@ -374,7 +381,7 @@ function initializeClock(id, endtime) {
   var timeinterval = setInterval(updateClock, 0);
 }
 
-var deadline = 'June 9 2017 19:25:00 GMT+0100';
+var deadline = 'June 23 2017 19:25:00 GMT+0100';
 initializeClock('clockdiv', deadline);
 </script>
 </body>
