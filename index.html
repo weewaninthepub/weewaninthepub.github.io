@@ -5,6 +5,9 @@
 <audio id="ticktock" autoplay loop>
 <source src="ticktock.ogg"/>
 </audio>
+<audio id="countdownend">
+<source src="countdownend.ogg"/>
+</audio>
 <div style="font-size: 4.5vw; text-align: center; color: lightblue; mix-blend-mode: color-dodge;" id ="question">
 Will the wee wan be in the public hoos in
 </div>
@@ -53,13 +56,15 @@ var volume = document.getElementById("volume");
 volume.addEventListener("input", function(){
   ticktock.volume = this.value * this.value * this.value / 1000000;
 });
-
+var playend = "true";
 document.getElementById("mute").onclick = function() {
       if(this.checked) {
          ticktock.muted = true;
+	 playend = "false";
 	}
        else {
 	 ticktock.muted = false;
+	 playend = "true";
 	}
 }
 </script>
@@ -371,9 +376,13 @@ function initializeClock(id, endtime) {
 	document.getElementById("volume").style.visibility = "hidden";
 	document.getElementById("mute").style.visibility = "hidden";
 	document.getElementById("labelshide").style.visibility = "hidden";
-	document.getElementById("labelshide2").style.visibility = "hidden";
+	document.getElementById("labelshide2").style.visibility = "hidden"; 
+if (t.total > -200) {
+if (playend != "false") {
+	countdownend.play()
+}}
+ticktock.muted = true
 document.getElementById("question").innerHTML = "The wee wan ??? in the public hoos!"
-ticktock.muted = true;
    }
   }
 
