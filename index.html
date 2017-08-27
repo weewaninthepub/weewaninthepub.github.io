@@ -1,7 +1,7 @@
 <html id="html">
-<body onload="">
+<body onload="" id="body">
 
-<label style="color:blue" id="labelshide">Volume</label><input id="volume" type="range" min="0" max="100" value="100" step="1"></input> <label id="labelshide2" style="color:blue">Mute</label><input type="checkbox" id="mute"><span style="float: right; color: grey"> FPS: <span id="fps"></span></span>
+<label style="color:blue" id="labelshide">Volume</label><input id="volume" type="range" min="0" max="100" value="100" step="1"></input> <label id="labelshide2" style="color:blue">Mute</label><input type="checkbox" id="mute"> <label style="color:blue">Fullscreen</label><input type="checkbox" id="fullscreen"><span style="float: right; color: grey"> FPS: <span id="fps"></span></span>
 <audio id="ticktock" autoplay loop>
 <source src="ticktock.ogg"/>
 </audio>
@@ -23,6 +23,47 @@ seconds and
 <span class="mseconds"></span>
 milliseconds?
 </div>
+<image class="background" src="weewanbackground.png"/>
+<script>
+
+
+var e = document.getElementById("body");
+var f = document.getElementById("fullscreen");
+
+f.onclick = function() {
+
+	if (RunPrefixMethod(document, "FullScreen") || RunPrefixMethod(document, "IsFullScreen")) {
+		RunPrefixMethod(document, "CancelFullScreen");
+
+	}
+	else {
+		RunPrefixMethod(e, "RequestFullScreen");
+	}
+
+}
+
+var pfx = ["webkit", "moz", "ms", "o", ""];
+function RunPrefixMethod(obj, method) {
+	
+	var p = 0, m, t;
+	while (p < pfx.length && !obj[m]) {
+		m = method;
+		if (pfx[p] == "") {
+			m = m.substr(0,1).toLowerCase() + m.substr(1);
+		}
+		m = pfx[p] + m;
+		t = typeof obj[m];
+		if (t != "undefined") {
+			pfx = [pfx[p]];
+			return (t == "function" ? obj[m]() : obj[m]);
+		}
+		p++;
+	}
+
+}
+
+
+</script>
 <script>
 var old = (new Date()).getTime();
 var base = performance.now(),
@@ -124,18 +165,26 @@ document.getElementById("mute").onclick = function() {
   }
 }
 html, body {margin: 0; height: 100%; overflow: hidden}
+html, body {margin-full-screen: 0; height-fullscreen: 100%; overflow-fullscreen: hidden}
+
+
+
+.background{
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -100;
+}
 
 body {
-background: url(weewanbackground.png) no-repeat center center fixed; 
 
-
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
 
   -webkit-animation: filter-animation 8s infinite;
   animation: filter-animation 8s infinite;
+
 }
 .pace {
   -webkit-pointer-events: none;
